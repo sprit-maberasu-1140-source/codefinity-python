@@ -1,16 +1,18 @@
 import pandas as pd
 
-def convert_column_to_float(df, column_name):
-    return df[column_name].astype(float)
+def replace_outliers_with_median(df, column, outlier_mask):
+    # Your code here
+    pass
+    median_value = df.loc[~outlier_mask,column].median()
 
-# Example usage:
+    df.loc[outlier_mask,column] = median_value
+# Example usage
 data = {
-    'product': ['A', 'B', 'C'],
-    'cost': ['12.5', '9.8', '7.0'],
-    'stock': ['100', '200', '150']
+    "name": ["Alice", "Bob", "Charlie", "David", "Eve"],
+    "score": [85, 90, 300, 88, 92]
 }
 df = pd.DataFrame(data)
+outlier_mask = df["score"] > 150
 
-df['cost'] = convert_column_to_float(df, 'cost')
-print(df['cost'])
-print(df.dtypes)
+replace_outliers_with_median(df, "score", outlier_mask)
+print(df)
