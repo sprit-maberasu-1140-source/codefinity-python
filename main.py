@@ -1,18 +1,15 @@
 import pandas as pd
 
-def count_duplicates(df):
+def impute_with_mean(df, column):
     # Your code here
-    pass
-
-    return df.duplicated().sum()
-
-# Sample DataFrame
+    mean_value = df[column].mean()
+    df[column] = df[column].fillna(mean_value)
+    return df
+# Example usage:
 data = {
-    "Name": ["Alice", "Bob", "Alice", "Charlie", "Bob", "Alice"],
-    "Age": [25, 30, 25, 35, 30, 25],
-    "City": ["NY", "LA", "NY", "SF", "LA", "NY"]
+    "id": [1, 2, 3, 4, 5],
+    "score": [85, None, 78, None, 92]
 }
 df = pd.DataFrame(data)
-
-result = count_duplicates(df)
-print(result)
+df_imputed = impute_with_mean(df, "score")
+print(df_imputed)
