@@ -1,16 +1,16 @@
 import pandas as pd
 
-def remove_duplicates(df):
-    # Your code here
-    return df.drop_duplicates()
+def flag_duplicates(df):
+    df_copy = df.copy()
+    is_duplicate = df_copy.duplicated(keep=False)
+    df_copy["is_duplicate"] = is_duplicate
+    return df_copy
 
-# Sample DataFrame for testing
 data = {
-    "Name": ["Alice", "Bob", "Alice", "Charlie", "Bob"],
-    "Age": [25, 30, 25, 35, 30],
-    "City": ["New York", "Paris", "New York", "London", "Paris"]
+    "id": [1, 2, 2, 3, 4, 4, 4],
+    "name": ["Alice", "Bob", "Bob", "Charlie", "David", "David", "David"],
+    "score": [85, 90, 90, 95, 80, 80, 80]
 }
 df = pd.DataFrame(data)
-
-result = remove_duplicates(df)
+result = flag_duplicates(df)
 print(result)
