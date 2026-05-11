@@ -1,18 +1,16 @@
 import pandas as pd
 
-def drop_missing_rows(df):
-    # ここで欠けているデータを含む行を取り除きます
-    return df.dropna()
+def remove_duplicates(df):
+    # Your code here
+    return df.drop_duplicates()
 
-# 動作確認用のサンプルデータ
-import numpy as np
+# Sample DataFrame for testing
 data = {
-    "name": ["Alice", "Bob", "Charlie", "David"],
-    "age": [25, np.nan, 30, 22],
-    "city": ["New York", "Los Angeles", np.nan, "Chicago"]
+    "Name": ["Alice", "Bob", "Alice", "Charlie", "Bob"],
+    "Age": [25, 30, 25, 35, 30],
+    "City": ["New York", "Paris", "New York", "London", "Paris"]
 }
 df = pd.DataFrame(data)
 
-# 関数を呼び出して結果を表示
-result = drop_missing_rows(df)
+result = remove_duplicates(df)
 print(result)
