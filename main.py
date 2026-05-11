@@ -1,15 +1,18 @@
 import pandas as pd
 
-def impute_with_mean(df, column):
-    # Your code here
-    mean_value = df[column].mean()
-    df[column] = df[column].fillna(mean_value)
-    return df
-# Example usage:
+def drop_missing_rows(df):
+    # ここで欠けているデータを含む行を取り除きます
+    return df.dropna()
+
+# 動作確認用のサンプルデータ
+import numpy as np
 data = {
-    "id": [1, 2, 3, 4, 5],
-    "score": [85, None, 78, None, 92]
+    "name": ["Alice", "Bob", "Charlie", "David"],
+    "age": [25, np.nan, 30, 22],
+    "city": ["New York", "Los Angeles", np.nan, "Chicago"]
 }
 df = pd.DataFrame(data)
-df_imputed = impute_with_mean(df, "score")
-print(df_imputed)
+
+# 関数を呼び出して結果を表示
+result = drop_missing_rows(df)
+print(result)
