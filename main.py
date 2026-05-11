@@ -1,16 +1,16 @@
 import pandas as pd
 
-def standardize_column_case(df, column_name):
-    # 1. 元の表をそのまま残すためにコピーを作ります
-    df = df.copy()
-    # 2. 指定された列(column_name)の文字をぜんぶ小文字にします
-    df[column_name] = df[column_name].str.lower()
-    # 3. 小文字に直した表を返します
-    return df
+def convert_column_to_float(df, column_name):
+    return df[column_name].astype(float)
 
+# Example usage:
 data = {
-    "Response": ["Yes", "no", "YES", "No", "yes", "NO", "nO", "YeS"]
+    'product': ['A', 'B', 'C'],
+    'cost': ['12.5', '9.8', '7.0'],
+    'stock': ['100', '200', '150']
 }
 df = pd.DataFrame(data)
-result = standardize_column_case(df, "Response")
-print(result)
+
+df['cost'] = convert_column_to_float(df, 'cost')
+print(df['cost'])
+print(df.dtypes)
