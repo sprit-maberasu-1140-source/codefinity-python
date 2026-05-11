@@ -1,16 +1,16 @@
 import pandas as pd
 
-def flag_duplicates(df):
-    df_copy = df.copy()
-    is_duplicate = df_copy.duplicated(keep=False)
-    df_copy["is_duplicate"] = is_duplicate
-    return df_copy
+def standardize_column_case(df, column_name):
+    # 1. 元の表をそのまま残すためにコピーを作ります
+    df = df.copy()
+    # 2. 指定された列(column_name)の文字をぜんぶ小文字にします
+    df[column_name] = df[column_name].str.lower()
+    # 3. 小文字に直した表を返します
+    return df
 
 data = {
-    "id": [1, 2, 2, 3, 4, 4, 4],
-    "name": ["Alice", "Bob", "Bob", "Charlie", "David", "David", "David"],
-    "score": [85, 90, 90, 95, 80, 80, 80]
+    "Response": ["Yes", "no", "YES", "No", "yes", "NO", "nO", "YeS"]
 }
 df = pd.DataFrame(data)
-result = flag_duplicates(df)
+result = standardize_column_case(df, "Response")
 print(result)
