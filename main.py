@@ -1,19 +1,18 @@
 import pandas as pd
-import numpy as np
 
-def detect_missing(dataframe):
-    # dataframe の中で「欠けている値（NaN）」を探して
-    # 同じ形の True/False の表を返す
-    return dataframe.isna()
+def count_duplicates(df):
+    # Your code here
+    pass
 
-# 動作確認用のサンプルデータ
+    return df.duplicated().sum()
+
+# Sample DataFrame
 data = {
-    "Name": ["Alice", "Bob", "Charlie", "David"],
-    "Age": [25, np.nan, 30, 22],
-    "City": ["New York", "Los Angeles", np.nan, "Chicago"],
-    "Score": [85, 90, np.nan, 88]
+    "Name": ["Alice", "Bob", "Alice", "Charlie", "Bob", "Alice"],
+    "Age": [25, 30, 25, 35, 30, 25],
+    "City": ["NY", "LA", "NY", "SF", "LA", "NY"]
 }
 df = pd.DataFrame(data)
 
-result = detect_missing(df)
+result = count_duplicates(df)
 print(result)
