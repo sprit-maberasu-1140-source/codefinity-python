@@ -1,18 +1,14 @@
 import pandas as pd
 
-def replace_outliers_with_median(df, column, outlier_mask):
-    # Your code here
-    pass
-    median_value = df.loc[~outlier_mask,column].median()
+def sum_column_in_chunks(file_path, column_name, chunk_size):
+    
+    total_sum = 0
+    for chunk in pd.read_csv(file_path, chunksize=chunk_size):
+        if column_name in chunk.columns:
+            total_sum += chunk[column_name].sum()
+    return total_sum
 
-    df.loc[outlier_mask,column] = median_value
-# Example usage
-data = {
-    "name": ["Alice", "Bob", "Charlie", "David", "Eve"],
-    "score": [85, 90, 300, 88, 92]
-}
-df = pd.DataFrame(data)
-outlier_mask = df["score"] > 150
 
-replace_outliers_with_median(df, "score", outlier_mask)
-print(df)
+url = "https://content-media-cdn.codefinity.com/b8f3c268-0e60-4ff0-a3ea-f145595033d8/section1/large_file.csv"
+result = sum_column_in_chunks(url, "Variable value", 100)
+print(result)
