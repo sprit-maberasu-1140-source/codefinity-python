@@ -1,14 +1,13 @@
 import polars as pl
 
-def groupby_mean(df: pl.DataFrame, group_col: str, value_col: str) -> pl.DataFrame:
-    return df.group_by(group_col).agg(
-        pl.col(value_col).mean().alias("mean_" + value_col)
-    )
+def filter_above_threshold(df, column, threshold):
+    return df.filter(pl.col(column) > threshold)
 
-df = pl.DataFrame({
-    "category": ["A", "B", "A", "B", "C", "A"],
-    "value": [10, 20, 30, 40, 50, 60]
-})
+data = {
+    "customer_id": [101, 102, 103, 104, 105],
+    "purchase_amount": [120.5, 99.9, 200.0, 75.0, 305.5]
+}
+df = pl.DataFrame(data)
 
-result = groupby_mean(df, "category", "value")
+result = filter_above_threshold(df, "purchase_amount", 100.0)
 print(result)
