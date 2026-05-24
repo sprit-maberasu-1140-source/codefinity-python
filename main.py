@@ -1,43 +1,31 @@
 import pandas as pd
-# 1. pandas ライブラリを pd という名前で読み込みます
 
-def filter_large_csv(input_file, output_file, column, threshold, chunk_size=10000):
-    # 2. 関数定義：入力ファイル、出力ファイル、列名、閾値、チャンクサイズを受け取る
+def oversample_minority(df, target_column):
+    class_counts = df[target_column].value_counts()
+    max_count = class_counts.max()
+    classes = class_counts.index.tolist()
+    balanced_df_list = []
+    for cls in classes:
+        class_subset = df[df[target_column] == cls]
+        if len(class_subset) < max_count:
+            oversampled_subset = class_subset.sample(max_count, replace=True, random_state=42)
+        else:
+            oversampled_subset = class_subset
+        balanced_df_list.append(oversampled_subset)
+    balanced_df = pd.concat(balanced_df_list).reset_index(drop=True)
+    return balanced_df
 
-    filtered_chunks = []
-    # 3. 条件を満たしたチャンクをためておくリストを初期化
+# Example usage
+data = {
+    "feature1": [1, 2, 3, 4, 5, 6],
+    "target": ["A", "A", "A", "B", "B", "B"]
+}
+df = pd.DataFrame(data)
+# Remove one "B" to create imbalance
+df = df.iloc[:-1]
 
-    for chunk in pd.read_csv(input_file, chunksize=chunk_size):
-        # 4. 指定サイズずつ CSV を分割読み込み
-
-        filtered = chunk[chunk[column] > threshold]
-        # 5. 各チャンクで、指定列の値が閾値を超える行だけを抽出
-
-        if not filtered.empty:
-            # 6. 抽出結果が空でなければ
-            filtered_chunks.append(filtered)
-            # 7. 結果リストに追加
-
-    if filtered_chunks:
-        # 8. １つ以上チャンクがたまっていれば
-        result = pd.concat(filtered_chunks)
-        # 9. リスト内のすべてのチャンクを縦方向に結合
-
-        result.to_csv(output_file, index=False)
-        # 10. 結合結果を出力ファイルに書き出し（行番号は含めない）
-    else:
-        # 11. 条件に合う行が１件もなかったとき
-        pd.read_csv(input_file, nrows=0).to_csv(output_file, index=False)
-        # 12. 元ファイルのヘッダーだけを出力
-
-# --- サンプル呼び出し ---
-input_file  = "https://.../large_file.csv"
-output_file = "filtered_output.csv"
-column      = "value"
-threshold   = 100
-
-try:
-    filter_large_csv(input_file, output_file, column, threshold)
-except Exception as e:
-    print(str(e))
-    # エラー発生時はメッセージを表示
+balanced_df = oversample_minority(df, "target")
+result_shape = balanced_df.shape
+result_counts = balanced_df["target"].value_counts()
+print(result_shape)
+print(result_counts)
