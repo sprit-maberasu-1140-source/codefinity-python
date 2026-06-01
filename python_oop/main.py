@@ -1,14 +1,14 @@
-class Rectangle:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-    
-    def area(self):
-        return self.width * self.height
-    
-    def perimeter(self):
-        return 2 * (self.width + self.height)
+class User:
+    total_users = 0
 
-rect = Rectangle(4, 5)
-print(rect.area())
-print(rect.perimeter())
+    def __init__(self, username):
+        self.username = username
+        User.total_users +=1
+
+    def get_info(self):
+        return (self.username,User.total_users)
+
+user1 = User("alice")
+user2 = User("bob")
+print(user1.get_info())
+print(user2.get_info())
