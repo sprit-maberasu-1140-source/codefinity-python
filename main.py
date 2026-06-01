@@ -1,32 +1,23 @@
-class Vehicle:
-    def __init__(self, brand, speed):
-        self.brand = brand
-        self.speed = speed
-    
-    def get_info(self):
-        return f"Brand: {self.brand},Speed: {self.speed}"
+from abc import ABC, abstractmethod
 
-class Car(Vehicle):
-    def __init__(self, brand, speed, doors):
-        super().__init__(brand,speed)
-        self.doors = doors
-    
-    def get_info(self):
-        return f"Brand: {self.brand},Speed: {self.speed},Doors: {self.doors}"
+class Notifier(ABC):
+    @abstractmethod
+    def send(self, message):
+        pass
 
-class Bike(Vehicle):
-    def __init__(self, brand, speed, type):
-        super().__init__(brand,speed)
-        self.type =type
-        
-    def get_info(self):
-        return f"Brand: {self.brand}, Speed: {self.speed}, Type: {self.type}"
+class EmailNotifier(Notifier):
+    def send(self, message):
+        return f"Email sent: {message}"
 
-# Create one object of each class and print their information
-v = Vehicle('Generic', 50)
-c = Car('Toyota', 120, 4)
-b = Bike('Giant', 30, 'mountain')
+class SMSNotifier(Notifier):
+    def send(self, message):
+        return f"SMS sent: {message}"
 
-print(v.get_info())
-print(c.get_info())
-print(b.get_info())
+def notify_user(notifier, message):
+    return notifier.send(message)
+
+# Example usage (do not remove these lines):
+email_notifier = EmailNotifier()
+sms_notifier = SMSNotifier()
+print(notify_user(email_notifier, "Welcome!"))
+print(notify_user(sms_notifier, "Your code is 1234."))
