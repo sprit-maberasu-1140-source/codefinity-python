@@ -1,25 +1,21 @@
-class Weapon:
-    def __init__(self, name, attack):
-        self.name = name
-        self.attack = attack
+import geopandas as gpd
+import matplotlib.pyplot as plt
 
-class Warrior:
-    def __init__(self, name):
-        self.name = name
-        self.weapon = None
+# Load the world countries dataset from Natural Earth (GeoJSON format)
+world_url = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson"
+world = gpd.read_file(world_url)
 
-    def equip_weapon(self, weapon):
-        self.weapon = weapon
+# Filter for European countries using the 'CONTINENT' column
+continent = 'Europe'
+europe = world[world['CONTINENT'] == continent]
 
-    def show_weapon(self):
-        if self.weapon:
-            print(f"{self.name} is holding a {self.weapon.name}")
-        else:
-            print(f"{self.name} is unarmed")
+# Plot all world countries in light gray
+ax = world.plot(color='lightgray', edgecolor='white', figsize=(10, 6))
 
+# Overlay European countries in a distinct color (not blue or green)
+europe.plot(ax=ax, color='goldenrod', edgecolor='black', label='Europe')
 
-sword = Weapon("Sword", 5)
-warrior = Warrior("Conan")
-
-warrior.equip_weapon(sword)
-warrior.show_weapon()
+# Add a title and legend
+plt.title("Countries of Europe")
+plt.legend()
+plt.show()
