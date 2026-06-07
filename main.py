@@ -1,25 +1,25 @@
-import numpy as np
+import math
 import matplotlib.pyplot as plt
 
-def approximate_curve_with_polygon(curve_func, interval, num_vertices):
-    x_values = np.linspace(interval[0], interval[1], num_vertices)
-    y_values = curve_func(x_values)
-    vertices = list(zip(x_values, y_values))
-    return vertices
+def approximate_ellipse(a, b, num_points):
+    points = []
+    for i in range(num_points):
+        theta = 2 * math.pi * i / num_points
+        x = a * math.cos(theta)
+        y = b * math.sin(theta)
+        points.append((x, y))
+    return points
 
-def curve_func(x):
-    return np.sin(x)
+def plot_ellipse(points):
+    x_values = [pt[0] for pt in points]
+    y_values = [pt[1] for pt in points]
+    x_values.append(points[0][0])
+    y_values.append(points[0][1])
+    plt.figure(figsize=(6,6))
+    plt.plot(x_values, y_values, marker='o')
+    plt.title("Ellipse Approximation")
+    plt.axis('equal')
+    plt.show()
 
-interval = (0, 2 * np.pi)
-num_vertices = 8
-polygon_vertices = approximate_curve_with_polygon(curve_func, interval, num_vertices)
-print(polygon_vertices)
-
-x_curve = np.linspace(interval[0], interval[1], 100)
-y_curve = curve_func(x_curve)
-x_poly = [v[0] for v in polygon_vertices]
-y_poly = [v[1] for v in polygon_vertices]
-plt.plot(x_curve, y_curve, label="Curve")
-plt.plot(x_poly, y_poly, marker='o', label="Polygon Approximation")
-plt.legend()
-plt.show()
+ellipse_points = approximate_ellipse(5, 3, 60)
+plot_ellipse(ellipse_points)
