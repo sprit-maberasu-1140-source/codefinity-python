@@ -1,25 +1,38 @@
-import math
 import matplotlib.pyplot as plt
+import numpy as np
 
-def approximate_ellipse(a, b, num_points):
-    points = []
-    for i in range(num_points):
-        theta = 2 * math.pi * i / num_points
-        x = a * math.cos(theta)
-        y = b * math.sin(theta)
-        points.append((x, y))
-    return points
+def plot_curve_approximations():
+    # Define the range for x
+    x = np.linspace(0, 2 * np.pi, 1000)
+    # True curves
+    y_circle = np.sqrt(1 - (np.cos(x)) ** 2)
+    y_ellipse = np.sqrt(1 - (0.5 * np.cos(x)) ** 2)
+    # Polygonal approximations
+    num_segments = 12
+    theta = np.linspace(0, 2 * np.pi, num_segments + 1)
+    # Circle approximation
+    circle_x = np.cos(theta)
+    circle_y = np.sin(theta)
+    # Ellipse approximation
+    ellipse_x = np.cos(theta)
+    ellipse_y = 0.5 * np.sin(theta)
 
-def plot_ellipse(points):
-    x_values = [pt[0] for pt in points]
-    y_values = [pt[1] for pt in points]
-    x_values.append(points[0][0])
-    y_values.append(points[0][1])
-    plt.figure(figsize=(6,6))
-    plt.plot(x_values, y_values, marker='o')
-    plt.title("Ellipse Approximation")
-    plt.axis('equal')
+    plt.figure(figsize=(10, 5))
+    # Plot true circle
+    plt.subplot(1, 2, 1)
+    plt.plot(np.cos(x), np.sin(x), label="True Circle", color="blue")
+    plt.plot(circle_x, circle_y, label="Polygonal Approx.", color="orange", marker="o")
+    plt.axis("equal")
+    plt.title("Circle Approximations")
+    plt.legend()
+    # Plot true ellipse
+    plt.subplot(1, 2, 2)
+    plt.plot(np.cos(x), 0.5 * np.sin(x), label="True Ellipse", color="green")
+    plt.plot(ellipse_x, ellipse_y, label="Polygonal Approx.", color="red", marker="o")
+    plt.axis("equal")
+    plt.title("Ellipse Approximations")
+    plt.legend()
+    plt.tight_layout()
     plt.show()
 
-ellipse_points = approximate_ellipse(5, 3, 60)
-plot_ellipse(ellipse_points)
+plot_curve_approximations()
