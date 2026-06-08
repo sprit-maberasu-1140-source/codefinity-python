@@ -1,11 +1,14 @@
-def merge_dicts(dict1, dict2):
-    merged = {**dict1, **dict2}
-    return merged
+def sum_first_last(numbers):
+    if len(numbers) == 1:
+        return numbers[0] * 2
+    else:
+        first, *_, last = numbers
+        return first + last
 
 
-result1 = merge_dicts({'a': 1, 'b': 2}, {'b': 3, 'c': 4})
-print(result1)
-result2 = merge_dicts({}, {'x': 10})
-print(result2)
-result3 = merge_dicts({'foo': 9}, {})
-print(result3)
+output1 = sum_first_last((1, 2, 3, 4, 5))
+print(output1)
+output2 = sum_first_last((10, 20))
+print(output2)
+output3 = sum_first_last((7,))
+print(output3)
