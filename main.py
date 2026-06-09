@@ -1,12 +1,11 @@
-def make_multiplier(n):
-    def multiplier(x):
-        return x * n
-    return multiplier
+def process_numbers(numbers):
+    def square_and_add_five(x):
+        return x ** 2 + 5
+    result = []
+    for num in numbers:
+        processed = square_and_add_five(num)
+        result.append(processed)
+    return result
 
-times3 = make_multiplier(3)
-result1 = times3(10)
-print(result1)
-
-times5 = make_multiplier(5)
-result2 = times5(4)
-print(result2)
+output = process_numbers([1, 2, 3])
+print(output)
