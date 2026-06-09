@@ -1,16 +1,12 @@
-def bank_account():
-    balance = 1000
-    
-    def withdraw(amount):
-        nonlocal balance
-        if amount <= balance:
-            balance -= amount
-            return balance
-        else:
-            return 'Insufficient funds'
-    
-    print(withdraw(200))
-    print(withdraw(900))
-    print(withdraw(100))
+def make_multiplier(n):
+    def multiplier(x):
+        return x * n
+    return multiplier
 
-bank_account()
+times3 = make_multiplier(3)
+result1 = times3(10)
+print(result1)
+
+times5 = make_multiplier(5)
+result2 = times5(4)
+print(result2)
