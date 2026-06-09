@@ -1,15 +1,16 @@
-def sum_of_squares_of_evens(numbers):
-    evens = filter(lambda x: x % 2 == 0, numbers)
-    squares = map(lambda x: x ** 2, evens)
-    result = sum(squares)
-    return result
+def bank_account():
+    balance = 1000
+    
+    def withdraw(amount):
+        nonlocal balance
+        if amount <= balance:
+            balance -= amount
+            return balance
+        else:
+            return 'Insufficient funds'
+    
+    print(withdraw(200))
+    print(withdraw(900))
+    print(withdraw(100))
 
-
-result1 = sum_of_squares_of_evens([1, 2, 3, 4, 5, 6])
-print(result1)
-result2 = sum_of_squares_of_evens([7, 9, 11])
-print(result2)
-result3 = sum_of_squares_of_evens([0, -2, -4])
-print(result3)
-result4 = sum_of_squares_of_evens([])
-print(result4)
+bank_account()
