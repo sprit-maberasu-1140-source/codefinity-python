@@ -1,16 +1,23 @@
-def create_power_up(multiplier):
-    def power_up(base_stat):
-        return base_stat * multiplier
-    return power_up
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
 
-power_up_double = create_power_up(2)
-power_up_triple = create_power_up(3)
-
-hero_attack = 10
-hero_defense = 5
-
-result_attack = power_up_double(hero_attack)
-result_defense = power_up_triple(hero_defense)
-
-print(result_attack)
-print(result_defense)
+df = pd.read_csv('https://codefinity-content-media.s3.eu-west-1.amazonaws.com/b22d1166-efda-45e8-979e-6c3ecfc566fc/houses_simple.csv')
+# Assign the variables
+X = df['square_feet']
+y = df['price']
+# Preprocess X
+X_tilde = sm.add_constant(X)
+# Build and train a model
+regression_model = sm.OLS(y, X_tilde).fit()
+# Create and preprocess X_new
+X_new = np.array([1300, 10000, 25000])
+X_new_tilde = sm.add_constant(X_new)
+# Predict the target for X_new
+y_pred = regression_model.predict(X_new_tilde)
+# Plot the data points and prediction line
+plt.scatter(X, y, alpha=0.5)
+plt.plot(X_new, y_pred, color='red')
+plt.show()
+print(y_pred)
