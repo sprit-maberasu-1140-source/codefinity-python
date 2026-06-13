@@ -1,36 +1,38 @@
 import pandas as pd
-import numpy as np
 import statsmodels.api as sm
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import numpy as np
 
-df = pd.read_csv(
-    'https://codefinity-content-media.s3.eu-west-1.amazonaws.com/'
-    'b22d1166-efda-45e8-979e-6c3ecfc566fc/houses_poly.csv'
-)
+df = pd.read_csv('https://codefinity-content-media.s3.eu-west-1.amazonaws.com/b22d1166-efda-45e8-979e-6c3ecfc566fc/houses_poly.csv')
 
-# 1. 説明変数 X に 'age' 列を DataFrame 形式で代入
+# 1. Assign the variables
 X = df[['age']]
 y = df['price']
-n = 2  # 多項式の次数
+n = 2  # Degree
 
-# 2. PolynomialFeatures で 1, x, x^2 の特徴量に変換
+# 2. Preprocess X
 X_tilde = PolynomialFeatures(n).fit_transform(X)
 
-# 3. OLS モデルを構築して学習
-model = sm.OLS(y, X_tilde).fit()
+# 3. Split
+X_tilde_train, X_tilde_test, y_train, y_test = train_test_split(
+    X_tilde, y, test_size=0.3, random_state=0
+)
 
-# 4. 予測用データを生成し、2 次元配列に変形
-X_new = np.linspace(0, 125, 200).reshape(-1, 1)
+# 4. Train model
+model = sm.OLS(y_train, X_tilde_train).fit()
 
-# 5. X_new を同様に多項式変換
-X_new_tilde = PolynomialFeatures(n).fit_transform(X_new)
+# 5. Predictions
+y_train_pred = model.predict(X_tilde_train)
+y_test_pred = model.predict(X_tilde_test)
 
-# 6. 予測と可視化
-y_pred = model.predict(X_new_tilde)
-plt.scatter(X, y, alpha=0.4)
-plt.plot(X_new, y_pred, color='orange')
-plt.show()
+# 6. RMSE
+train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred))
+test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
 
-# 7. モデルの係数を出力
-print(model.params)
+print("Train RMSE:", train_rmse)
+print("Test RMSE:", test_rmse)
+
+# 7. Summary
+print(model.summary())
