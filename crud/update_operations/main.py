@@ -13,7 +13,7 @@ cursor.execute(
 )
 
 # Update the record where email is 'new@gmail.com'
-query = "UPDATE users SET id = 1 WHERE email = 'new@gmail.com'"
+query = "UPDATE users SET email = 'new@gmail.com' WHERE id = 1"
 cursor.execute(query)
 
 # Execute select query to verify update
