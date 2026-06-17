@@ -1,38 +1,33 @@
 import pandas as pd
-import statsmodels.api as sm
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-import numpy as np
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import make_column_transformer
+from sklearn.pipeline import make_pipeline
 
-df = pd.read_csv('https://codefinity-content-media.s3.eu-west-1.amazonaws.com/b22d1166-efda-45e8-979e-6c3ecfc566fc/houses_poly.csv')
-
-# 1. Assign the variables
-X = df[['age']]
-y = df['price']
-n = 2  # Degree
-
-# 2. Preprocess X
-X_tilde = PolynomialFeatures(n).fit_transform(X)
-
-# 3. Split
-X_tilde_train, X_tilde_test, y_train, y_test = train_test_split(
-    X_tilde, y, test_size=0.3, random_state=0
+# データの読み込み
+df = pd.read_csv(
+    'https://codefinity-content-media.s3.eu-west-1.amazonaws.com/a65bbc96-309e-4df9-a790-a1eb8c815a1c/penguins.csv'
 )
 
-# 4. Train model
-model = sm.OLS(y_train, X_tilde_train).fit()
+# 欠損値が2つ以上ある行を削除
+df = df[df.isna().sum(axis=1) < 2]
 
-# 5. Predictions
-y_train_pred = model.predict(X_tilde_train)
-y_test_pred = model.predict(X_tilde_test)
+# 説明変数Xと目的変数yに分割
+X, y = df.drop('species', axis=1), df['species']
 
-# 6. RMSE
-train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred))
-test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
+# sex, islandのみOneHotでエンコードし、他の列はそのまま残すColumnTransformerを作成
+ct = make_column_transformer(
+    (OneHotEncoder(), ['sex', 'island']),
+    remainder='passthrough'
+)
 
-print("Train RMSE:", train_rmse)
-print("Test RMSE:", test_rmse)
+# ColumnTransformer → 欠損値補完 → 標準化 の順で実行するパイプラインを構築
+pipe = make_pipeline(
+    ct,
+    SimpleImputer(strategy='most_frequent'),
+    StandardScaler()
+)
 
-# 7. Summary
-print(model.summary())
+# Xを変換してX_transformedに保存
+X_transformed = pipe.fit_transform(X)
+print(X_transformed)
