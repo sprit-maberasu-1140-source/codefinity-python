@@ -1,13 +1,17 @@
 import pandas as pd
-from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
-df = pd.read_csv('https://codefinity-content-media.s3.eu-west-1.amazonaws.com/a65bbc96-309e-4df9-a790-a1eb8c815a1c/penguins.csv')
-# Missing 値が 2 個以上ある行を除外
-df = df[df.isna().sum(axis=1) < 2]
-
-# 1. most_frequent（最頻値）で埋めるインピューターを作成
-imputer = SimpleImputer(strategy='most_frequent')
-# 2. df[['sex']] の２次元配列に対して補完し、ravel() で一次元にして代入
-df['sex'] = imputer.fit_transform(df[['sex']]).ravel()
-
-print(df.head(8))
+df = pd.read_csv('https://codefinity-content-media.s3.eu-west-1.amazonaws.com/a65bbc96-309e-4df9-a790-a1eb8c815a1c/penguins_imputed.csv')
+# Assign X, y variables
+y = df['species']
+X = df.drop('species', axis=1)
+# Initialize an OneHotEncoder object
+feature_enc = OneHotEncoder()
+# One-Hot Encode the 'island' and 'sex' columns and add encodings to X
+encoded = feature_enc.fit_transform(X[['island', 'sex']]).toarray()
+X[['island_Biscoe', 'island_Dream', 'island_Torgersen', 'sex_FEMALE', 'sex_MALE']] = encoded
+X.drop(['island', 'sex'], axis=1, inplace=True) # Drop initial 'sex', 'island' columns
+# Encode the y
+label_enc = LabelEncoder()
+y = label_enc.fit_transform(y)
+print(X)
